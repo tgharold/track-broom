@@ -5,8 +5,12 @@ from mutagen.mp3 import MP3
 from mutagen.flac import FLAC
 from mutagen.mp4 import MP4
 from mutagen.oggvorbis import OggVorbis
-from mutagen.wma import WMA
 from mutagen import File as MutagenFile
+
+try:
+    from mutagen.wma import WMA
+except ImportError:
+    WMA = None
 
 
 STANDARD_FIELDS = [
