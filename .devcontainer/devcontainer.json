@@ -1,0 +1,29 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/python
+{
+	"name": "Python 3",
+	"image": "mcr.microsoft.com/devcontainers/python:3-3.14-bookworm",
+	"features": {
+		"ghcr.io/devcontainers/features/node:1": {},
+		"ghcr.io/devcontainers/features/python:1": {},
+		"ghcr.io/danzilberdan/devcontainers/opencode:latest": {}
+	},
+	"mounts": [
+		"source=${localEnv:HOME}/.config/opencode,target=/home/vscode/.config/opencode,type=bind",
+		"source=${localEnv:HOME}/.local/share/opencode,target=/home/vscode/.local/share/opencode,type=bind",
+		"source=${localEnv:HOME}/.local/state/opencode,target=/home/vscode/.local/state/opencode,type=bind"
+	],
+	"containerEnv": {
+		"OMLX_API_TOKEN": "${localEnv:OMLX_API_TOKEN}",
+		"OMLX_BASE_URL": "http://host.docker.internal:1234/v1"
+	},
+	"customizations": {
+		"vscode": {
+			"extensions": []
+		}
+	},
+	"runArgs": [
+		"--cap-drop=ALL", // Drop all kernel capabilities
+		"--security-opt=no-new-privileges" // Prevent privilege escalation
+	]
+}
