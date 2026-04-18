@@ -1,0 +1,33 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "trackoon"
+version = "0.1.0"
+description = "Scan music files, analyze metadata, and update tags like genre"
+requires-python = ">=3.11"
+dependencies = [
+    "typer>=0.12.5",
+    "mutagen>=1.47.0",
+    "rich>=13.7.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "ruff>=0.4.0",
+]
+
+[project.scripts]
+trackoon = "trackoon.cli:app"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "B", "A"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
