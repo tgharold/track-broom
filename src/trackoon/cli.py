@@ -8,7 +8,7 @@ from rich.console import Console
 from rich.table import Table
 
 from trackoon import __version__
-from trackoon.scanner import scan_music
+from trackoon.scanner import list_files, scan_music
 from trackoon.tags import get_tags, set_genres
 
 app = typer.Typer(
@@ -58,6 +58,23 @@ def scan_files(
         )
 
     console.print(table)
+
+@app.command("list")
+def list_files_cmd(
+    path: Path = typer.Argument(..., help="Path to directory to list"),
+    extension: str | None = typer.Option(None, "--ext", "-e", help="Filter by extension (e.g. mp3, pdf)"),
+):
+    """List all files in a directory recursively."""
+    files = list(list_files(path, extension=extension))
+    if not files:
+        console.print("[yellow]No files found[/yellow]")
+        return
+    for file_path, ext in files:
+        if path.is_dir():
+            console.print(str(file_path.relative_to(path)))
+        else:
+            console.print(file_path.name)
+
 
 
 @app.command("000-enhance-genres")
