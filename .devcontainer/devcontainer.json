@@ -4,6 +4,7 @@
 	"name": "Python 3",
 	"image": "mcr.microsoft.com/devcontainers/python:3-3.14-bookworm",
 	"features": {
+		"ghcr.io/devcontainers-extra/features/ffmpeg-apt-get:1": {},
 		"ghcr.io/devcontainers/features/node:1": {},
 		"ghcr.io/devcontainers/features/python:1": {},
 		"ghcr.io/danzilberdan/devcontainers/opencode:latest": {}
