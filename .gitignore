@@ -116,4 +116,8 @@ venv.bak/
 .dmypy.json
 dmypy.json
 
+# uv
+=*
+uv.lock
+
 .vscode/
