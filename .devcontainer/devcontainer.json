@@ -11,7 +11,10 @@
 	"mounts": [
 		"source=${localEnv:HOME}/.config/opencode,target=/home/vscode/.config/opencode,type=bind",
 		"source=${localEnv:HOME}/.local/share/opencode,target=/home/vscode/.local/share/opencode,type=bind",
-		"source=${localEnv:HOME}/.local/state/opencode,target=/home/vscode/.local/state/opencode,type=bind"
+		//"source=${localEnv:HOME}/.local/state/opencode,target=/home/vscode/.local/state/opencode,type=bind",
+		//"source=devcontainer-local,target=/home/vscode/.local,type=volume"
+		"source=${localEnv:HOME}/.local/state,target=/home/vscode/.local/state,type=bind",
+    	"source=opencode-share,target=/home/vscode/.local/share,type=volume"
 	],
 	"containerEnv": {
 		"OMLX_API_TOKEN": "${localEnv:OMLX_API_TOKEN}",
@@ -25,5 +28,6 @@
 	"runArgs": [
 		"--cap-drop=ALL", // Drop all kernel capabilities
 		"--security-opt=no-new-privileges" // Prevent privilege escalation
-	]
+	],
+	//"postCreateCommand": "mkdir -p ~/.local/share/opencode && chmod 700 ~/.local/share/opencode"
 }
