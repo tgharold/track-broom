@@ -24,12 +24,19 @@
 	},
 	"customizations": {
 		"vscode": {
-			"extensions": []
+			"settings": {
+				"python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
+				"python.terminal.activateEnvInCurrentTerminal": true
+			},
+			"extensions": [
+				"ms-python.python",
+				"ms-python.vscode-pylance"
+			]
 		}
 	},
 	"runArgs": [
 		"--cap-drop=ALL", // Drop all kernel capabilities
 		"--security-opt=no-new-privileges" // Prevent privilege escalation
 	],
-	//"postCreateCommand": "mkdir -p ~/.local/share/opencode && chmod 700 ~/.local/share/opencode"
+	"postCreateCommand": "bash .devcontainer/setup-venv.sh"
 }
