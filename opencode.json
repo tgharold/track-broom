@@ -2,6 +2,8 @@
     "$schema": "https://opencode.ai/config.json",
     "permission": {
         "git add *": "allow",
-        "git commit -m *": "allow"
+        "git commit -m *": "allow",
+        "pip list": "allow",
+        "python -m pytest tests/": "allow"
     }
 }
