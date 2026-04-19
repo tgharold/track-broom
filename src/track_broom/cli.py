@@ -1,4 +1,4 @@
-"""CLI entry point for trackoon."""
+"""CLI entry point for track_broom."""
 
 from pathlib import Path
 
@@ -6,12 +6,12 @@ import typer
 from rich.console import Console
 from rich.table import Table
 
-from trackoon import __version__
-from trackoon.scanner import list_files, scan_music
-from trackoon.tags import get_tags, set_genres
+from track_broom import __version__
+from track_broom.scanner import list_files, scan_music
+from track_broom.tags import get_tags, set_genres
 
 app = typer.Typer(
-    name="trackoon",
+    name="track_broom",
     help="Scan music files, analyze metadata, and update tags.",
     add_completion=False,
 )

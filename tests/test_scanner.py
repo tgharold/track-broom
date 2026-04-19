@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from trackoon.scanner import list_files
+from track_broom.scanner import list_files
 
 
 @pytest.fixture
