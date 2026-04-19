@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 
@@ -26,7 +26,7 @@ class FileSystemEntry:
     @property
     def last_modified(self) -> datetime:
         """Last modification time as timezone-aware datetime."""
-        return datetime.fromtimestamp(self._stat.st_mtime, tz=timezone.utc)
+        return datetime.fromtimestamp(self._stat.st_mtime, tz=UTC)
 
     @property
     def path(self) -> Path:

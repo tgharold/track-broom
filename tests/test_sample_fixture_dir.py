@@ -4,6 +4,7 @@ from pathlib import Path
 
 from tests.fixtures.builders import EXPECTED_TOTAL_FILES, FORMATS
 
+
 class TestFixtureDirSmoke:
     """Smoke test that sample_fixture_dir generates the right structure."""
 
