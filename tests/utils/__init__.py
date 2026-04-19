@@ -235,3 +235,50 @@ def add_ogg_tags(
     audio["TRACKNUMBER"] = str(tracknumber)
 
     audio.save()
+
+
+def encode_wma(
+    pcm_data: bytes,
+    output_path: str,
+    samplerate: int = 44100,
+    channels: int = 1,
+) -> str:
+    """Encode raw PCM bytes to WMA using ffmpeg-python.
+
+    Returns output_path on success, raises ffmpeg.Error on failure.
+    """
+    (
+        ffmpeg.input("pipe:0", format="s16le", ar=samplerate, ac=channels)
+        .output(output_path, ar=samplerate, acodec="wmav2")
+        .overwrite_output()
+        .run(input=pcm_data, capture_stdout=True, capture_stderr=True)
+    )
+    return output_path
+
+
+def add_wma_tags(
+    filepath: str,
+    title: str,
+    artist: str = "",
+    album: str = "",
+    genre: str = "",
+    tracknumber: int = 1,
+) -> None:
+    """Write ASF tags to a WMA file using mutagen.asf.ASF.
+
+    Uses ASF title-specific names (WM/AlbumArtist, WM/AlbumName, WM/Genre, WM/TrackNumber).
+    """
+    from mutagen.asf import ASF
+
+    audio = ASF(filepath)
+
+    audio["Title"] = title
+    if artist:
+        audio["Author"] = artist
+    if album:
+        audio["WM/AlbumName"] = album
+    if genre:
+        audio["WM/Genre"] = genre
+    audio["WM/TrackNumber"] = str(tracknumber)
+
+    audio.save()
