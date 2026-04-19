@@ -9,6 +9,7 @@
             "PYTHONPATH=src python -m pytest tests/": "allow",
             "uv build": "allow",
             "uv pip install '.[dev]'": "allow",
+            "uv pip list": "allow",
             "uv run pytest": "allow",
             "uv sync": "allow"
         }
