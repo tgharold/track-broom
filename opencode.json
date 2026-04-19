@@ -11,8 +11,6 @@
             "pyright *": "allow",
             "python -m pytest tests/": "allow",
             "python tests/fixtures/*": "allow",
-            "PYTHONPATH=. .venv/bin/python scripts/*": "allow",
-            "PYTHONPATH=. uv run scripts/*": "allow",
             "PYTHONPATH=. pyright *": "allow",
             "ruff *": "allow",
             "sed *": "allow",
