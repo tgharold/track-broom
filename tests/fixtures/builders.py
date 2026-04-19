@@ -119,7 +119,6 @@ def _build_tone_file(
     )
     return path
 
-
 def generate_sample_dir(base: Path) -> int:
     """Generate all sample files for all formats under *base*.
     Returns the total number of files created.
