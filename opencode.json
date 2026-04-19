@@ -2,7 +2,7 @@
     "$schema": "https://opencode.ai/config.json",
     "permission": {
         "bash": {
-            ".venv/bin/python scripts/*": "allow",
+            ".venv/bin/python tests/fixtures/*": "allow",
             "cat *": "allow",
             "ffmpeg *": "allow",
             "git add *": "allow",
@@ -10,7 +10,7 @@
             "pip list": "allow",
             "pyright *": "allow",
             "python -m pytest tests/": "allow",
-            "python scripts/*": "allow",
+            "python tests/fixtures/*": "allow",
             "PYTHONPATH=. .venv/bin/python scripts/*": "allow",
             "PYTHONPATH=. uv run scripts/*": "allow",
             "PYTHONPATH=. pyright *": "allow",
@@ -22,7 +22,7 @@
             "uv pip install '.[dev]'": "allow",
             "uv pip list": "allow",
             "uv run pytest": "allow",
-            "uv run scripts/*": "allow",
+            "uv run tests/fixtures/*": "allow",
             "uv sync": "allow"
         }
     }
