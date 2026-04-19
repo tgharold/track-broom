@@ -6,7 +6,11 @@
             "git commit -m *": "allow",
             "pip list": "allow",
             "python -m pytest tests/": "allow",
-            "PYTHONPATH=src python -m pytest tests/": "allow"
+            "PYTHONPATH=src python -m pytest tests/": "allow",
+            "uv build": "allow",
+            "uv pip install '.[dev]'": "allow",
+            "uv run pytest": "allow",
+            "uv sync": "allow"
         }
     }
 }
