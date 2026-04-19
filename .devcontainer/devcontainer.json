@@ -6,7 +6,8 @@
 	"features": {
 		"ghcr.io/devcontainers-extra/features/ffmpeg-apt-get:1": {},
 		"ghcr.io/devcontainers/features/node:1": {},
-		"ghcr.io/danzilberdan/devcontainers/opencode:latest": {}
+		"ghcr.io/danzilberdan/devcontainers/opencode:latest": {},
+		"ghcr.io/devcontainers-extra/features/uv:1": {}
 	},
 	"mounts": [
 		"source=${localEnv:HOME}/Downloads,target=/home/vscode/Downloads,type=bind,consistency=cached",
@@ -36,5 +37,5 @@
 		"--cap-drop=ALL", // Drop all kernel capabilities
 		//"--security-opt=no-new-privileges" // Prevent privilege escalation
 	],
-	"postCreateCommand": "bash .devcontainer/setup-venv.sh"
+	"postCreateCommand": "uv sync"
 }

@@ -17,7 +17,6 @@ fi
 
 # Always use the venv interpreter explicitly
 "${VENV_PY}" -m pip install --upgrade pip setuptools wheel
-"${VENV_PY}" -m pip install --upgrade uv
 
 if [ -f "requirements.txt" ]; then
   "${VENV_PY}" -m pip install -r requirements.txt
