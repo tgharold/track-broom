@@ -16,6 +16,7 @@
             "PYTHONPATH=. pyright *": "allow",
             "ruff *": "allow",
             "sed *": "allow",
+            "touch *": "allow",
             "tr *": "allow",
             "uv build": "allow",
             "uv pip install '.[dev]'": "allow",
