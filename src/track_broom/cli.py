@@ -105,6 +105,8 @@ def list_files_cmd(
                 "directory": str(display.parent) if display.parent != Path(".") else "",
                 "filename": display.name,
                 "extension": entry.extension,
+                "size": entry.size,
+                "last_modified": entry.last_modified.isoformat(),
             }
         )
     if output_json:
