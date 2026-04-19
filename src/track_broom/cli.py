@@ -1,5 +1,6 @@
 """CLI entry point for track_broom."""
 
+import json
 from pathlib import Path
 
 import typer
@@ -71,17 +72,45 @@ def list_files_cmd(
         "-e",
         help="Filter by extension (e.g. mp3, pdf)",
     ),
+    output_json: bool = typer.Option(
+        False,
+        "--json",
+        "-j",
+        help="Output results as JSON",
+    ),
 ):
     """List all files in a directory recursively."""
     files = list(list_files(path, extension=extension))
     if not files:
-        console.print("[yellow]No files found[/yellow]")
-        return
-    for file_path, _ext in files:
-        if path.is_dir():
-            console.print(str(file_path.relative_to(path)))
+        if output_json:
+            typer.echo(json.dumps({"results": []}))
         else:
-            console.print(file_path.name)
+            console.print("[yellow]No files found[/yellow]")
+        return
+    results = []
+    for file_path, ext in files:
+        if path.is_dir():
+            display = file_path.relative_to(path)
+        else:
+            display = file_path
+        name = display.name
+        directory = str(display.parent) if display.parent != Path(".") else ""
+        results.append(
+            {
+                "path": str(display),
+                "directory": directory,
+                "filename": name,
+                "extension": ext,
+            }
+        )
+    if output_json:
+        typer.echo(json.dumps({"results": results}))
+    else:
+        for file_path, _ext in files:
+            if path.is_dir():
+                console.print(str(file_path.relative_to(path)))
+            else:
+                console.print(file_path.name)
 
 
 @app.command("000-enhance-genres")
