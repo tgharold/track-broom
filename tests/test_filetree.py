@@ -102,7 +102,7 @@ class TestFileSystemEntryParent:
         parent_dir = FileSystemDirectoryEntry(subdir)
         entry = FileSystemFileEntry(file_path, parent=parent_dir)
         assert entry.parent is parent_dir
-        assert entry.parent.name == "sub"
+        assert entry.parent is not None and entry.parent.name == "sub"
 
     def test_directory_has_correct_parent(self, tmp_path: Path) -> None:
         base_dir = tmp_path / "base"
@@ -112,7 +112,7 @@ class TestFileSystemEntryParent:
         parent = FileSystemDirectoryEntry(base_dir)
         entry = FileSystemDirectoryEntry(subdir, parent=parent)
         assert entry.parent is parent
-        assert entry.parent.name == "base"
+        assert entry.parent is not None and entry.parent.name == "base"
 
 
 # ---- FileSystemFileEntry ----
@@ -197,6 +197,7 @@ class TestFileSystemDirectoryEntry:
         assert names == {"subdir"}
 
         subdir_entry = [c for c in children if c.name == "subdir"][0]
+        assert isinstance(subdir_entry, FileSystemDirectoryEntry)
         nested_children = subdir_entry.entries()
         assert len(nested_children) == 1
         assert nested_children[0].name == "nested.mp3"
@@ -337,7 +338,7 @@ class TestFileTreeIntegration:
         parent = FileSystemDirectoryEntry(subdir)
         file_entry = FileSystemFileEntry(file_path, parent=parent)
 
-        assert file_entry.parent.name == "parent_dir"
+        assert file_entry.parent is not None and file_entry.parent.name == "parent_dir"
 
     def test_multiple_files_same_directory(self, tmp_path: Path) -> None:
         files = [f"track{i:02d}.mp3" for i in range(10)]
