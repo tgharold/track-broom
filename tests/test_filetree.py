@@ -281,12 +281,22 @@ class TestFileTreeIntegration:
         """Test a multi-level directory structure."""
         # Create:
         # /base
-        #   song1.mp3
-        #   album1/
-        #     track01.mp3
-        #     track02.flac
-        #     bonus/
-        #       hidden.ogg
+        #   loose-song1.mp3
+        #   loose-song2.m4a
+        #   Seasons_artist/
+        #     album1_spring/
+        #       track-rainy-day-01.mp3
+        #       track-night-02.mp3
+        #       track-before-the-dawn-03.mp3
+        #     album2_fall/
+        #       track-fall-01.mp3
+        #       track-fall-02.mp3
+        #   Artist_formerly_known_as_Jester/
+        #     Colors/
+        #       purple-01.mp3
+        #       rain-02.mp3
+        #       bonus/
+        #         hidden_colors.ogg
 
         (tmp_path / "song1.mp3").touch()
         album1 = tmp_path / "album1"
