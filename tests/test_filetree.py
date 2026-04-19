@@ -298,35 +298,81 @@ class TestFileTreeIntegration:
         #       bonus/
         #         hidden_colors.ogg
 
-        (tmp_path / "song1.mp3").touch()
-        album1 = tmp_path / "album1"
+        (tmp_path / "loose-song1.mp3").touch()
+        (tmp_path / "loose-song2.m4a").touch()
+
+        seasons = tmp_path / "Seasons_artist"
+        seasons.mkdir()
+        album1 = seasons / "album1_spring"
         album1.mkdir()
-        (album1 / "track01.mp3").touch()
-        (album1 / "track02.flac").touch()
-        bonus = album1 / "bonus"
+        (album1 / "track-rainy-day-01.mp3").touch()
+        (album1 / "track-night-02.mp3").touch()
+        (album1 / "track-before-the-dawn-03.mp3").touch()
+        album2 = seasons / "album2_fall"
+        album2.mkdir()
+        (album2 / "track-fall-01.mp3").touch()
+        (album2 / "track-fall-02.mp3").touch()
+
+        jester = tmp_path / "Artist_formerly_known_as_Jester"
+        jester.mkdir()
+        colors = jester / "Colors"
+        colors.mkdir()
+        (colors / "purple-01.mp3").touch()
+        (colors / "rain-02.mp3").touch()
+        bonus = colors / "bonus"
         bonus.mkdir()
-        (bonus / "hidden.ogg").touch()
+        (bonus / "hidden_colors.ogg").touch()
 
         root = FileSystemDirectoryEntry(tmp_path)
 
         top_children = root.entries()
-        assert len(top_children) == 2  # song1.mp3 + album1/
+        assert len(top_children) == 4  # loose-song1.mp3, loose-song2.m4a, Seasons_artist/, Artist_formerly_known_as_Jester/
         assert root.name == tmp_path.name
 
-        album1_entry = [c for c in top_children if c.name == "album1"][0]
+        seasons_entry = [c for c in top_children if c.name == "Seasons_artist"][0]
+        assert isinstance(seasons_entry, FileSystemDirectoryEntry)
+        assert seasons_entry.parent is root
+
+        seasons_children = seasons_entry.entries()
+        assert len(seasons_children) == 2  # album1_spring/, album2_fall/
+
+        album1_entry = [c for c in seasons_children if c.name == "album1_spring"][0]
         assert isinstance(album1_entry, FileSystemDirectoryEntry)
-        assert album1_entry.parent is root
+        assert album1_entry.parent is seasons_entry
 
         album1_children = album1_entry.entries()
-        assert len(album1_children) == 3  # track01.mp3, track02.flac, bonus/
+        assert len(album1_children) == 3  # track-rainy-day-01.mp3, track-night-02.mp3, track-before-the-dawn-03.mp3
+        album1_names = {c.name for c in album1_children}
+        assert album1_names == {"track-rainy-day-01.mp3", "track-night-02.mp3", "track-before-the-dawn-03.mp3"}
 
-        bonus_entry = [c for c in album1_children if c.name == "bonus"][0]
+        album2_entry = [c for c in seasons_children if c.name == "album2_fall"][0]
+        assert isinstance(album2_entry, FileSystemDirectoryEntry)
+        assert album2_entry.parent is seasons_entry
+
+        album2_children = album2_entry.entries()
+        assert len(album2_children) == 2  # track-fall-01.mp3, track-fall-02.mp3
+
+        jester_entry = [c for c in top_children if c.name == "Artist_formerly_known_as_Jester"][0]
+        assert isinstance(jester_entry, FileSystemDirectoryEntry)
+        assert jester_entry.parent is root
+
+        jester_children = jester_entry.entries()
+        assert len(jester_children) == 1  # Colors/
+
+        colors_entry = [c for c in jester_children if c.name == "Colors"][0]
+        assert isinstance(colors_entry, FileSystemDirectoryEntry)
+        assert colors_entry.parent is jester_entry
+
+        colors_children = colors_entry.entries()
+        assert len(colors_children) == 3  # purple-01.mp3, rain-02.mp3, bonus/
+
+        bonus_entry = [c for c in colors_children if c.name == "bonus"][0]
         assert isinstance(bonus_entry, FileSystemDirectoryEntry)
-        assert bonus_entry.parent is album1_entry
+        assert bonus_entry.parent is colors_entry
 
         bonus_children = bonus_entry.entries()
         assert len(bonus_children) == 1
-        assert bonus_children[0].name == "hidden.ogg"
+        assert bonus_children[0].name == "hidden_colors.ogg"
         assert bonus_children[0].parent is bonus_entry
 
     def test_file_size_reflects_actual_content(self, tmp_path: Path) -> None:
