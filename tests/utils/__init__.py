@@ -94,6 +94,53 @@ def add_id3_tags(
     audio.save()
 
 
+def encode_flac(
+    pcm_data: bytes,
+    output_path: str,
+    samplerate: int = 44100,
+    channels: int = 1,
+) -> str:
+    """Encode raw PCM bytes to FLAC using ffmpeg-python.
+
+    Returns output_path on success, raises ffmpeg.Error on failure.
+    """
+    (
+        ffmpeg.input("pipe:0", format="s16le", ar=samplerate, ac=channels)
+        .output(output_path, ar=samplerate, acodec="flac")
+        .overwrite_output()
+        .run(input=pcm_data, capture_stdout=True, capture_stderr=True)
+    )
+    return output_path
+
+
+def add_flac_tags(
+    filepath: str,
+    title: str,
+    artist: str = "",
+    album: str = "",
+    genre: str = "",
+    tracknumber: int = 1,
+) -> None:
+    """Write Vorbis comment tags to a FLAC file using mutagen.flac.FLAC.
+
+    Uses lowercase field names (TITLE, ARTIST, ALBUM, GENRE, TRACKNUMBER).
+    """
+    from mutagen.flac import FLAC
+
+    audio = FLAC(filepath)
+
+    audio["TITLE"] = title
+    if artist:
+        audio["ARTIST"] = artist
+    if album:
+        audio["ALBUM"] = album
+    if genre:
+        audio["GENRE"] = genre
+    audio["TRACKNUMBER"] = str(tracknumber)
+
+    audio.save()
+
+
 def encode_m4a(
     pcm_data: bytes,
     output_path: str,
