@@ -20,7 +20,10 @@ console = Console()
 
 
 @app.callback()
-def main(ctx: typer.Context, version: bool = typer.Option(False, "--version", help="Print version")):
+def main(
+    ctx: typer.Context,
+    version: bool = typer.Option(False, "--version", help="Print version"),
+):
     """Trackoon - automate music tag enhancement."""
     if version:
         typer.echo(__version__)
@@ -46,7 +49,7 @@ def scan_files(
     table.add_column("Album")
     table.add_column("Genre")
 
-    for file_path, ext in files:
+    for file_path, _ext in files:
         tags = get_tags(file_path)
         table.add_row(
             str(file_path.relative_to(path.parent) if path.is_dir() else file_path.name),
@@ -58,22 +61,27 @@ def scan_files(
 
     console.print(table)
 
+
 @app.command("list")
 def list_files_cmd(
     path: Path = typer.Argument(..., help="Path to directory to list"),
-    extension: str | None = typer.Option(None, "--ext", "-e", help="Filter by extension (e.g. mp3, pdf)"),
+    extension: str | None = typer.Option(
+        None,
+        "--ext",
+        "-e",
+        help="Filter by extension (e.g. mp3, pdf)",
+    ),
 ):
     """List all files in a directory recursively."""
     files = list(list_files(path, extension=extension))
     if not files:
         console.print("[yellow]No files found[/yellow]")
         return
-    for file_path, ext in files:
+    for file_path, _ext in files:
         if path.is_dir():
             console.print(str(file_path.relative_to(path)))
         else:
             console.print(file_path.name)
-
 
 
 @app.command("000-enhance-genres")
@@ -94,7 +102,7 @@ def enhance_genres(
     updated = 0
     errors = 0
 
-    for file_path, ext in files:
+    for file_path, _ext in files:
         try:
             tags = get_tags(file_path)
             genre = tags.get("genre", "").strip()
@@ -110,7 +118,9 @@ def enhance_genres(
             console.print(f"  [red]Error:[/red] {file_path.name} - {e}")
             errors += 1
 
-    console.print(f"\n[bold]Results:[/bold] {processed} processed, {updated} updated, {errors} errors")
+    console.print(
+        f"\n[bold]Results:[/bold] {processed} processed, {updated} updated, {errors} errors"
+    )
 
 
 if __name__ == "__main__":
