@@ -1,9 +1,8 @@
 # track-broom — Agent Instructions
 
 ## Setup
-- `uv sync` — install deps (requires uv; Python >= 3.11)
+- In a devcontainer, `uv` is installed by `.devcontainer/setup.sh` and is **only available after activating the venv**: `source .venv/bin/activate && uv sync` (not available as a system command in locked-down environments)
 - `.venv/` is gitignored, but excluded from uv lockfiles via the `=*` prefix workaround
-- Always run within the venv: activate it with `source .venv/bin/activate`
 
 ## Run
 - `.venv/bin/track-broom scan <path>` — scan music files and display metadata table
