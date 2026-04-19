@@ -59,6 +59,6 @@ class FileSystemDirectoryEntry(FileSystemEntry):
                 result.append(FileSystemFileEntry(child_path, self))
         return result
 
-    def children(self) -> list[FileSystemFileEntry]:
+    def file_children(self) -> list[FileSystemFileEntry]:
         """Return only file children of this directory."""
         return [e for e in self.entries() if isinstance(e, FileSystemFileEntry)]

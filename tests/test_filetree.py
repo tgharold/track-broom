@@ -235,7 +235,7 @@ class TestFileSystemDirectoryEntry:
         (tmp_path / "file1.mp3").touch()
 
         entry = FileSystemDirectoryEntry(tmp_path)
-        children = entry.children()
+        children = entry.file_children()
         assert len(children) == 1
         assert isinstance(children[0], FileSystemFileEntry)
         assert children[0].name == "file1.mp3"
@@ -245,7 +245,7 @@ class TestFileSystemDirectoryEntry:
         empty_dir.mkdir()
 
         entry = FileSystemDirectoryEntry(empty_dir)
-        assert entry.children() == []
+        assert entry.file_children() == []
 
     def test_children_excludes_subdirectories(self, tmp_path: Path) -> None:
         (tmp_path / "subdir").mkdir()
@@ -253,7 +253,7 @@ class TestFileSystemDirectoryEntry:
         (tmp_path / "file2.flac").touch()
 
         entry = FileSystemDirectoryEntry(tmp_path)
-        children = entry.children()
+        children = entry.file_children()
         assert len(children) == 2
         for child in children:
             assert isinstance(child, FileSystemFileEntry)
@@ -265,7 +265,7 @@ class TestFileSystemDirectoryEntry:
         (tmp_path / "nobinary").touch()
 
         entry = FileSystemDirectoryEntry(tmp_path)
-        children = entry.children()
+        children = entry.file_children()
         assert len(children) == 4
         names = {c.name for c in children}
         assert names == {"song.mp3", "track.flac", "midi.mka", "nobinary"}
@@ -346,7 +346,7 @@ class TestFileTreeIntegration:
             (tmp_path / name).touch()
 
         entry = FileSystemDirectoryEntry(tmp_path)
-        children = entry.children()
+        children = entry.file_children()
         assert len(children) == 10
         names = {c.name for c in children}
         assert names == set(files)
