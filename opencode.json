@@ -3,6 +3,7 @@
     "permission": {
         "bash": {
             ".venv/bin/python scripts/*": "allow",
+            "cat *": "allow",
             "git add *": "allow",
             "git commit -m *": "allow",
             "pip list": "allow",
@@ -12,6 +13,7 @@
             "PYTHONPATH=. uv run scripts/*": "allow",
             "PYTHONPATH=. pyright *": "allow",
             "ruff *": "allow",
+            "sed *": "allow",
             "uv build": "allow",
             "uv pip install '.[dev]'": "allow",
             "uv pip list": "allow",
