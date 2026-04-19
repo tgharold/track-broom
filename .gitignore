@@ -121,5 +121,6 @@ dmypy.json
 uv.lock
 
 .vscode/
+test_files/
 test_mp3s/
 test_m4as/
