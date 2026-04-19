@@ -4,7 +4,7 @@ import math
 import struct
 
 import ffmpeg
-from mutagen.id3 import TALB, TCON, TIT2, TPE1, TRCK
+from mutagen.id3._frames import TALB, TCON, TIT2, TPE1, TRCK
 from mutagen.mp3 import MP3
 
 
@@ -81,15 +81,15 @@ def add_id3_tags(
     if audio.tags is None:
         audio.add_tags()
 
-    tags = audio.tags
-    tags.add(TIT2(encoding=3, text=title))
+    assert audio.tags is not None
+    audio.tags.add(TIT2(encoding=3, text=title))
     if artist:
-        tags.add(TPE1(encoding=3, text=artist))
+        audio.tags.add(TPE1(encoding=3, text=artist))
     if album:
-        tags.add(TALB(encoding=3, text=album))
+        audio.tags.add(TALB(encoding=3, text=album))
     if genre:
-        tags.add(TCON(encoding=3, text=genre))
-    tags.add(TRCK(encoding=3, text=str(tracknumber)))
+        audio.tags.add(TCON(encoding=3, text=genre))
+    audio.tags.add(TRCK(encoding=3, text=str(tracknumber)))
 
     audio.save()
 
