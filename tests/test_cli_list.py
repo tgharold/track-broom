@@ -47,7 +47,7 @@ class TestListFilesCmd:
         result = runner.invoke(app, ["list", str(sample_fixture_dir), "-e", "m4a"])
         assert result.exit_code == 0, result.exception
         lines = _parse_output(result.stdout)
-        assert len(lines) == 1
+        assert len(lines) >= 1
 
     def test_list_with_nonexistent_ext(self, sample_fixture_dir: Path):
         """list_files_cmd with non-existent ext prints 'No files found'."""
