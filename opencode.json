@@ -10,7 +10,7 @@
             "pip list": "allow",
             "pyright *": "allow",
             "python -m pytest tests/": "allow",
-            "python tests/fixtures/*": "allow",
+            "python tests/*": "allow",
             "PYTHONPATH=. pyright *": "allow",
             "ruff *": "allow",
             "sed *": "allow",
@@ -20,7 +20,7 @@
             "uv pip install '.[dev]'": "allow",
             "uv pip list": "allow",
             "uv run pytest *": "allow",
-            "uv run tests/fixtures/*": "allow",
+            "uv run tests/*": "allow",
             "uv sync": "allow"
         }
     }
