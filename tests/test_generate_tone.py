@@ -6,7 +6,7 @@ from pathlib import Path
 import ffmpeg
 import pytest
 
-from trackoon.util import add_id3_tags, encode_mp3, tone_samples
+from tests.utils import add_id3_tags, encode_mp3, tone_samples
 
 
 class TestToneSamples:

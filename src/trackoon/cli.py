@@ -9,7 +9,6 @@ from rich.table import Table
 from trackoon import __version__
 from trackoon.scanner import list_files, scan_music
 from trackoon.tags import get_tags, set_genres
-from trackoon.util import tone_samples, encode_mp3, add_id3_tags
 
 app = typer.Typer(
     name="trackoon",
@@ -112,55 +111,6 @@ def enhance_genres(
             errors += 1
 
     console.print(f"\n[bold]Results:[/bold] {processed} processed, {updated} updated, {errors} errors")
-
-
-@app.command()
-def generate_tone(
-    freq: float = typer.Option(440.0, "--freq", help="Tone frequency in Hz"),
-    duration: float = typer.Option(5.0, "--duration", help="Duration in seconds"),
-    output: Path = typer.Option(Path("./tone.mp3"), "--output", "-o", help="Output file path"),
-    samplerate: int = typer.Option(44100, "--samplerate", help="Sample rate in Hz"),
-    channels: int = typer.Option(1, "--channels", help="Mono=1 / Stereo=2"),
-    bitrate: int = typer.Option(128, "--bitrate", help="MP3 bitrate in kbps"),
-    title: str = typer.Option("Generated Tone", "--title", help="ID3 title tag"),
-    artist: str = typer.Option("", "--artist", help="ID3 artist tag"),
-    album: str = typer.Option("", "--album", help="ID3 album tag"),
-    genre: str = typer.Option("", "--genre", help="ID3 genre tag"),
-    tracknumber: int = typer.Option(1, "--tracknumber", help="Track number"),
-):
-    """Generate a synthetic tone and save it as an MP3 file with ID3 tags."""
-    console.print(f"[bold]Generating tone:[/bold] {freq} Hz, {duration}s")
-    console.print(f"[bold]Output:[/bold] {output}")
-
-    pcm_path = output.with_suffix(".pcm")
-    pcm_data = tone_samples(freq=int(freq), duration=duration, samplerate=samplerate)
-    pcm_path.write_bytes(pcm_data)
-    console.print(f"  [green]PCM:[/green] {pcm_path}")
-
-    encode_mp3(
-        pcm_data=pcm_data,
-        output_path=str(output),
-        samplerate=samplerate,
-        channels=channels,
-        bitrate=bitrate,
-    )
-    console.print(f"  [green]MP3:[/green] {output}")
-
-    add_id3_tags(
-        filepath=str(output),
-        title=title,
-        artist=artist,
-        album=album,
-        genre=genre,
-        tracknumber=tracknumber,
-    )
-    console.print(f"  [green]ID3 tags:[/green] title={title}, artist={artist or '(none)'}")
-    console.print(f"  [green]Done:[/green] {output}")
-
-    try:
-        pcm_path.unlink()
-    except Exception:
-        pass
 
 
 if __name__ == "__main__":

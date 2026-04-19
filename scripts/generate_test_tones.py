@@ -3,7 +3,7 @@
 
 from pathlib import Path
 
-from trackoon.util import add_id3_tags, encode_mp3, tone_samples
+from tests.utils import add_id3_tags, encode_mp3, tone_samples
 
 OUTPUT_DIR = Path("test_mp3s")
 
