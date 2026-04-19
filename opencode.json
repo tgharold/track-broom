@@ -2,15 +2,21 @@
     "$schema": "https://opencode.ai/config.json",
     "permission": {
         "bash": {
+            ".venv/bin/python scripts/*": "allow",
             "git add *": "allow",
             "git commit -m *": "allow",
             "pip list": "allow",
+            "pyright *": "allow",
             "python -m pytest tests/": "allow",
-            "PYTHONPATH=src python -m pytest tests/": "allow",
+            "PYTHONPATH=. .venv/bin/python scripts/*": "allow",
+            "PYTHONPATH=. uv run scripts/*": "allow",
+            "PYTHONPATH=. pyright *": "allow",
+            "ruff *": "allow",
             "uv build": "allow",
             "uv pip install '.[dev]'": "allow",
             "uv pip list": "allow",
             "uv run pytest": "allow",
+            "uv run scripts/*": "allow",
             "uv sync": "allow"
         }
     }
