@@ -489,14 +489,15 @@ class TestFileSystemDirectoryEntryDescendants:
         root = FileSystemDirectoryEntry(hier_tmp_path)
         seasons = [e for e in root.entries() if e.name == "Seasons_artist"][0]
         assert isinstance(seasons, FileSystemDirectoryEntry)
-        expected_names = {"album1_spring", "album2_fall",
-                          "track-rainy-day-01.mp3", "track-night-02.mp3",
-                          "track-before-the-dawn-03.mp3", "track-fall-01.mp3",
-                          "track-fall-02.mp3"}
-        assert names == expected_names
+        desc = seasons.descendants()
         assert len(desc) == 7  # album1_spring(dir) + 3 files + album2_fall(dir) + 2 files
         names = {e.name for e in desc}
-        assert names == {"album1_spring", "album2_fall", "track-rainy-day-01.mp3", "track-night-02.mp3", "track-before-the-dawn-03.mp3", "track-fall-01.mp3", "track-fall-02.mp3"}
+        expected_names = {
+            "album1_spring", "album2_fall", "track-rainy-day-01.mp3",
+            "track-night-02.mp3", "track-before-the-dawn-03.mp3",
+            "track-fall-01.mp3", "track-fall-02.mp3",
+        }
+        assert names == expected_names
 
     def test_descendants_parent_pointers(self, hier_tmp_path: Path) -> None:
         """Each descendant should point to its immediate parent, not the root."""
@@ -507,11 +508,12 @@ class TestFileSystemDirectoryEntryDescendants:
             assert isinstance(entry.parent, FileSystemDirectoryEntry)
 
     def test_descendants_deep_nesting(self, hier_tmp_path: Path) -> None:
-        jester_dir = FileSystemDirectoryEntry(jester.path)
-        colors = [e for e in jester_dir.entries() if e.name == "Colors"][0]
         root = FileSystemDirectoryEntry(hier_tmp_path)
         jester = [e for e in root.entries() if e.name == "Artist_formerly_known_as_Jester"][0]
-        colors = [e for e in FileSystemDirectoryEntry(jester.path).entries() if e.name == "Colors"][0]
+        jester_dir = FileSystemDirectoryEntry(jester.path)
+        colors = [
+            e for e in jester_dir.entries() if e.name == "Colors"
+        ][0]
         assert isinstance(colors, FileSystemDirectoryEntry)
         all_colors_desc = colors.descendants()
         assert len(all_colors_desc) == 4  # purple-01.mp3, rain-02.mp3, bonus/dir, hidden_colors.ogg
@@ -543,10 +545,7 @@ class TestFileSystemDirectoryEntryDescendants:
 
     def test_descendants_flatten_cross_branches(self, hier_tmp_path: Path) -> None:
         """Descendants should be a flat list across all branches, not grouped."""
-        expected_names = ["loose-song1.mp3", "loose-song2.m4a",
-                          "track-rainy-day-01.mp3", "track-fall-02.mp3",
-                          "hidden_colors.ogg"]
-        for name in expected_names:
+        root = FileSystemDirectoryEntry(hier_tmp_path)
         all_desc = root.descendants()
         expected_names = ["loose-song1.mp3", "loose-song2.m4a",
                           "track-rainy-day-01.mp3", "track-fall-02.mp3",
