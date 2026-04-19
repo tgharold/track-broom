@@ -5,7 +5,7 @@ from pathlib import Path
 
 from tests.utils import add_id3_tags, encode_mp3, tone_samples
 
-OUTPUT_DIR = Path("test_mp3s")
+OUTPUT_DIR = Path("test_files/mp3s")
 
 TONES = [
     {
@@ -43,7 +43,7 @@ TONES = [
 
 def main() -> None:
     """Generate all test MP3 files."""
-    OUTPUT_DIR.mkdir(exist_ok=True)
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
     for tone_info in TONES:
         print(f"Generating {tone_info['filename']}: {tone_info['freq']} Hz")

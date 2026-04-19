@@ -5,7 +5,7 @@ from pathlib import Path
 
 from tests.utils import add_m4a_tags, encode_m4a, tone_samples
 
-OUTPUT_DIR = Path("test_m4as")
+OUTPUT_DIR = Path("test_files/m4as")
 
 TONES = [
     {
@@ -43,7 +43,7 @@ TONES = [
 
 def main() -> None:
     """Generate all test M4A files."""
-    OUTPUT_DIR.mkdir(exist_ok=True)
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
     for tone_info in TONES:
         print(f"Generating {tone_info['filename']}: {tone_info['freq']} Hz")
