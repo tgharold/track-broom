@@ -2,10 +2,9 @@
 
 from pathlib import Path
 
-from tests.utils import add_m4a_tags, encode_m4a, tone_samples
-
 import pytest
 
+from tests.utils import add_m4a_tags, encode_m4a, tone_samples
 from track_broom.scanner import list_files
 
 
