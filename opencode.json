@@ -4,6 +4,7 @@
         "bash": {
             ".venv/bin/python scripts/*": "allow",
             "cat *": "allow",
+            "ffmpeg *": "allow",
             "git add *": "allow",
             "git commit -m *": "allow",
             "pip list": "allow",
@@ -15,6 +16,7 @@
             "PYTHONPATH=. pyright *": "allow",
             "ruff *": "allow",
             "sed *": "allow",
+            "tr *": "allow",
             "uv build": "allow",
             "uv pip install '.[dev]'": "allow",
             "uv pip list": "allow",
