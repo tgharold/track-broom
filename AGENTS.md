@@ -1,26 +1,14 @@
 # track-broom — Agent Instructions
 
 ## Setup
-- In a devcontainer, `uv` is installed by `.devcontainer/setup.sh` and is **only available after activating the venv**: `source .venv/bin/activate && uv sync` (not available as a system command in locked-down environments)
-- `.venv/` is gitignored, but excluded from uv lockfiles via the `=*` prefix workaround
+- `.venv/` is gitignored
 
 ## Run
-- `.venv/bin/track-broom scan <path>` — scan music files and display metadata table
-- `.venv/bin/track-broom list <path>` — list files, optional `--extension` filter
-- `.venv/bin/track-broom 000-enhance-genres <path>` — **skeleton, not implemented** (see TODO in source)
-- `.venv/bin/track-broom generate-tone` — generate test MP3 with hardcoded values per CLI args
-- `.venv/bin/python -m track_broom` — same as `track-broom`
 
 ## Lint
-- `.venv/bin/ruff check --line-length=100 .` — linter (config in `pyproject.toml`)
-- `.venv/bin/ruff format .` — formatter (config in `pyproject.toml`)
 
 ## Test
-- `.venv/bin/python -m pytest tests/` — run all 35 tests
-  - `tests/test_scanner.py` (14 tests) — file discovery
-  - `tests/test_generate_tone.py` (14 tests) — PCM generation, ffmpeg encoding, ID3 tags (uses `tests.utils`)
-  - `tests/test_m4a.py` (7 tests) — M4A encoding with ALAC, MP4 tag writing (uses `tests.utils`)
-  - **No `test_tags.py`** — `tags.py` has no dedicated tests despite being the core module
+- `uv run pytest` — run all tests
 
 ## Architecture
 - `src/track_broom/cli.py` — Typer CLI, 5 commands
