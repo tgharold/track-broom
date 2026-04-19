@@ -12,11 +12,7 @@
 	},
 	"mounts": [
 		"source=${localEnv:HOME}/Downloads,target=/home/vscode/Downloads,type=bind,consistency=cached",
-		// OpenCode configuration and data directories
-		"source=${localEnv:HOME}/.config/opencode,target=/home/vscode/.config/opencode,type=bind",
-		"source=${localEnv:HOME}/.local/share/opencode,target=/home/vscode/.local/share/opencode,type=bind",
-		"source=${localEnv:HOME}/.local/state,target=/home/vscode/.local/state,type=bind",
-		"source=opencode-share,target=/home/vscode/.local/share,type=volume"
+		"source=${localEnv:HOME}/.config/opencode,target=/home/vscode/.config/opencode,type=bind"
 	],
 	"containerEnv": {
 		"OMLX_API_TOKEN": "${localEnv:OMLX_API_TOKEN}",
