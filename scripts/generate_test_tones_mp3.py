@@ -5,7 +5,7 @@ from pathlib import Path
 
 from tests.utils import add_id3_tags, encode_mp3, tone_samples
 
-OUTPUT_DIR = Path("test_files/mp3s")
+OUTPUT_DIR = Path("test_files/mp3")
 
 TONES = [
     {

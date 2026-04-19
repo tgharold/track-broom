@@ -5,7 +5,7 @@ from pathlib import Path
 
 from tests.utils import add_m4a_tags, encode_m4a, tone_samples
 
-OUTPUT_DIR = Path("test_files/m4as")
+OUTPUT_DIR = Path("test_files/m4a")
 
 TONES = [
     {
