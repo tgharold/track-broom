@@ -170,6 +170,7 @@ class TestAddID3Tags:
 
         from mutagen.mp3 import MP3
         audio = MP3(str(output))
+        assert audio.tags is not None
         trck = audio.tags.get("TRCK")
         assert trck is not None
         assert str(trck.text[0]) == "1"

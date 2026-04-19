@@ -96,5 +96,6 @@ class TestAddM4aTags:
         from mutagen.mp4 import MP4
 
         audio = MP4(str(output))
+        assert audio.tags is not None
         track = audio.tags["trkn"][0]
         assert track[0] == 1

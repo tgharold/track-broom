@@ -175,6 +175,7 @@ def add_m4a_tags(
     from mutagen.mp4 import MP4
 
     audio = MP4(filepath)
+    assert audio.tags is not None
     audio.tags["\xa9nam"] = [title]
     if artist:
         audio.tags["\xa9ART"] = [artist]
