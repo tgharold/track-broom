@@ -187,3 +187,50 @@ def add_m4a_tags(
     audio.tags["trkn"] = [(tracknumber, 0)]
 
     audio.save()
+
+
+def encode_ogg(
+    pcm_data: bytes,
+    output_path: str,
+    samplerate: int = 44100,
+    channels: int = 1,
+) -> str:
+    """Encode raw PCM bytes to OGG Vorbis using ffmpeg-python.
+
+    Returns output_path on success, raises ffmpeg.Error on failure.
+    """
+    (
+        ffmpeg.input("pipe:0", format="s16le", ar=samplerate, ac=channels)
+        .output(output_path, ar=samplerate, acodec="libvorbis")
+        .overwrite_output()
+        .run(input=pcm_data, capture_stdout=True, capture_stderr=True)
+    )
+    return output_path
+
+
+def add_ogg_tags(
+    filepath: str,
+    title: str,
+    artist: str = "",
+    album: str = "",
+    genre: str = "",
+    tracknumber: int = 1,
+) -> None:
+    """Write Vorbis comment tags to an OGG file using mutagen.oggvorbis.OggVorbis.
+
+    Uses lowercase field names (TITLE, ARTIST, ALBUM, GENRE, TRACKNUMBER).
+    """
+    from mutagen.oggvorbis import OggVorbis
+
+    audio = OggVorbis(filepath)
+
+    audio["TITLE"] = title
+    if artist:
+        audio["ARTIST"] = artist
+    if album:
+        audio["ALBUM"] = album
+    if genre:
+        audio["GENRE"] = genre
+    audio["TRACKNUMBER"] = str(tracknumber)
+
+    audio.save()
