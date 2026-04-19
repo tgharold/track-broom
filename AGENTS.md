@@ -21,6 +21,6 @@
 
 ## Gotchas
 - `ffmpeg` binary must be on PATH (ffmpeg-python is a thin wrapper, no bundled FFmpeg)
-- `test_mp3s/` and `test_m4as/` are gitignored; regenerate via `scripts/generate_test_tones_mp3.py` and `scripts/generate_test_tones_m4a.py`
+- `test_files/` is gitignored; regenerate via `scripts/generate_test_tones_mp3.py`, `scripts/generate_test_tones_m4a.py`, `scripts/generate_test_tones_flac.py`, `scripts/generate_test_tones_ogg.py`, and `scripts/generate_test_tones_wma.py`
 - `000-enhance-genres` is a TODO placeholder — genre detection logic is not implemented
 - Package name is `track_broom`; CLI entry point in `pyproject.toml` maps `"track-broom"` → `track_broom.cli:app`
