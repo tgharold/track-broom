@@ -337,7 +337,12 @@ class TestFileTreeIntegration:
         root = FileSystemDirectoryEntry(hier_tmp_path)
 
         top_children = root.entries()
-        assert len(top_children) == 4  # loose-song1.mp3, loose-song2.m4a, Seasons_artist/, Artist_formerly_known_as_Jester/
+        # loose-song1.mp3, loose-song2.m4a, Seasons_artist/, Artist_formerly_known_as_Jester/
+        assert len(top_children) == 4
+        assert len(top_children) == 4
+        assert len(top_children) == 4
+        assert len(top_children) == 4
+        assert len(top_children) == 4
         assert root.name == hier_tmp_path.name
 
         seasons_entry = [c for c in top_children if c.name == "Seasons_artist"][0]
@@ -352,9 +357,11 @@ class TestFileTreeIntegration:
         assert album1_entry.parent is seasons_entry
 
         album1_children = album1_entry.entries()
-        assert len(album1_children) == 3  # track-rainy-day-01.mp3, track-night-02.mp3, track-before-the-dawn-03.mp3
+        # track-rainy-day-01.mp3, track-night-02.mp3, track-before-the-dawn-03.mp3
+        assert len(album1_children) == 3
         album1_names = {c.name for c in album1_children}
-        assert album1_names == {"track-rainy-day-01.mp3", "track-night-02.mp3", "track-before-the-dawn-03.mp3"}
+        expected = {"track-rainy-day-01.mp3", "track-night-02.mp3", "track-before-the-dawn-03.mp3"}
+        assert album1_names == expected
 
         album2_entry = [c for c in seasons_children if c.name == "album2_fall"][0]
         assert isinstance(album2_entry, FileSystemDirectoryEntry)
@@ -482,7 +489,11 @@ class TestFileSystemDirectoryEntryDescendants:
         root = FileSystemDirectoryEntry(hier_tmp_path)
         seasons = [e for e in root.entries() if e.name == "Seasons_artist"][0]
         assert isinstance(seasons, FileSystemDirectoryEntry)
-        desc = seasons.descendants()
+        expected_names = {"album1_spring", "album2_fall",
+                          "track-rainy-day-01.mp3", "track-night-02.mp3",
+                          "track-before-the-dawn-03.mp3", "track-fall-01.mp3",
+                          "track-fall-02.mp3"}
+        assert names == expected_names
         assert len(desc) == 7  # album1_spring(dir) + 3 files + album2_fall(dir) + 2 files
         names = {e.name for e in desc}
         assert names == {"album1_spring", "album2_fall", "track-rainy-day-01.mp3", "track-night-02.mp3", "track-before-the-dawn-03.mp3", "track-fall-01.mp3", "track-fall-02.mp3"}
@@ -496,7 +507,8 @@ class TestFileSystemDirectoryEntryDescendants:
             assert isinstance(entry.parent, FileSystemDirectoryEntry)
 
     def test_descendants_deep_nesting(self, hier_tmp_path: Path) -> None:
-        """The bonus directory inside Colors has a deeper descendant (hidden_colors.ogg)."""
+        jester_dir = FileSystemDirectoryEntry(jester.path)
+        colors = [e for e in jester_dir.entries() if e.name == "Colors"][0]
         root = FileSystemDirectoryEntry(hier_tmp_path)
         jester = [e for e in root.entries() if e.name == "Artist_formerly_known_as_Jester"][0]
         colors = [e for e in FileSystemDirectoryEntry(jester.path).entries() if e.name == "Colors"][0]
@@ -531,7 +543,13 @@ class TestFileSystemDirectoryEntryDescendants:
 
     def test_descendants_flatten_cross_branches(self, hier_tmp_path: Path) -> None:
         """Descendants should be a flat list across all branches, not grouped."""
-        root = FileSystemDirectoryEntry(hier_tmp_path)
+        expected_names = ["loose-song1.mp3", "loose-song2.m4a",
+                          "track-rainy-day-01.mp3", "track-fall-02.mp3",
+                          "hidden_colors.ogg"]
+        for name in expected_names:
         all_desc = root.descendants()
-        for name in ["loose-song1.mp3", "loose-song2.m4a", "track-rainy-day-01.mp3", "track-fall-02.mp3", "hidden_colors.ogg"]:
+        expected_names = ["loose-song1.mp3", "loose-song2.m4a",
+                          "track-rainy-day-01.mp3", "track-fall-02.mp3",
+                          "hidden_colors.ogg"]
+        for name in expected_names:
             assert any(e.name == name for e in all_desc)

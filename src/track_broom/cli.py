@@ -91,7 +91,10 @@ def list_files_cmd(
     root_dir = FileSystemDirectoryEntry(path) if path.is_dir() else None
     results = []
     for file_path, _ext in files:
-        entry = FileSystemFileEntry(file_path, parent=root_dir) if root_dir else FileSystemFileEntry(file_path)
+        if root_dir:
+            entry = FileSystemFileEntry(file_path, parent=root_dir)
+        else:
+            entry = FileSystemFileEntry(file_path)
         if path.is_dir():
             display = entry.path.relative_to(path)
         else:

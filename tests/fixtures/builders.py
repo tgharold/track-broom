@@ -235,7 +235,7 @@ def generate_sample_dir(base: Path) -> int:
     """
     total = 0
     for track in TRACKS:
-        path = _build_tone_file(base, track)
+        _build_tone_file(base, track)
         total += 1
 
     return total

@@ -12,8 +12,8 @@ runner = CliRunner()
 
 def _parse_output(output: str) -> list[str]:
     """Parse CLI list output into individual filenames, excluding dotfiles."""
-    lines = [l.strip() for l in output.splitlines() if l.strip()]
-    return [l for l in lines if not l.lstrip("/").startswith(".")]
+    lines = [ln.strip() for ln in output.splitlines() if ln.strip()]
+    return [ln for ln in lines if not ln.lstrip("/").startswith(".")]
 
 
 class TestListFilesCmd:
