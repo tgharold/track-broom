@@ -9,6 +9,7 @@
             "pip list": "allow",
             "pyright *": "allow",
             "python -m pytest tests/": "allow",
+            "python scripts/*": "allow",
             "PYTHONPATH=. .venv/bin/python scripts/*": "allow",
             "PYTHONPATH=. uv run scripts/*": "allow",
             "PYTHONPATH=. pyright *": "allow",
