@@ -59,6 +59,18 @@ class FileSystemDirectoryEntry(FileSystemEntry):
                 result.append(FileSystemFileEntry(child_path, self))
         return result
 
+    def descendants(self) -> list[FileSystemEntry]:
+        """Return a flat list of all entries in the subtree (entries of entries, recursively).
+
+        Each entry maintains a pointer back to its original parent.
+        """
+        result = []
+        for child in self.entries():
+            result.append(child)
+            if isinstance(child, FileSystemDirectoryEntry):
+                result.extend(child.descendants())
+        return result
+
     def file_children(self) -> list[FileSystemFileEntry]:
         """Return only file children of this directory."""
         return [e for e in self.entries() if isinstance(e, FileSystemFileEntry)]
