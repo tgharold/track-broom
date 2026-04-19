@@ -19,6 +19,9 @@
 		"OMLX_API_TOKEN": "${localEnv:OMLX_API_TOKEN}",
 		"OMLX_BASE_URL": "http://host.docker.internal:1234/v1"
 	},
+	 "remoteEnv": {
+        "PYTHONPATH": "${containerWorkspaceFolder}"
+    },
 	"customizations": {
 		"vscode": {
 			"settings": {
