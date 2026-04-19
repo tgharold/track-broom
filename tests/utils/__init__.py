@@ -48,7 +48,7 @@ def encode_mp3(
     output_path: str,
     samplerate: int = 44100,
     channels: int = 1,
-    bitrate: int = 128,
+    **output_kwargs: int,
 ) -> str:
     """Encode raw PCM bytes to MP3 using ffmpeg-python.
 
@@ -56,7 +56,7 @@ def encode_mp3(
     """
     (
         ffmpeg.input("pipe:0", format="s16le", ar=samplerate, ac=channels)
-        .output(output_path, ar=samplerate, **{"b:a": f"{bitrate}k"})
+        .output(output_path, ar=samplerate, **output_kwargs)
         .overwrite_output()
         .run(input=pcm_data, capture_stdout=True, capture_stderr=True)
     )
