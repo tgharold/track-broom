@@ -452,3 +452,86 @@ class TestFileTreeIntegration:
         assert root.name == tmp_path.name
         for child in root.entries():
             assert child.parent is root
+
+
+# ---- descendants() ----
+
+
+class TestFileSystemDirectoryEntryDescendants:
+    """Tests for the FileSystemDirectoryEntry.descendants() method."""
+
+    def test_descendants_count_full_tree(self, hier_tmp_path: Path) -> None:
+        """All descendants across the full hierarchy (files and directories)."""
+        root = FileSystemDirectoryEntry(hier_tmp_path)
+        all_desc = root.descendants()
+        assert len(all_desc) == 16
+
+    def test_descendants_includes_files_and_directories(self, hier_tmp_path: Path) -> None:
+        """descendants() returns both file and directory entries mixed."""
+        root = FileSystemDirectoryEntry(hier_tmp_path)
+        all_desc = root.descendants()
+        files = [e for e in all_desc if isinstance(e, FileSystemFileEntry)]
+        dirs = [e for e in all_desc if isinstance(e, FileSystemDirectoryEntry)]
+        assert len(files) == 10
+        assert len(dirs) == 6
+        assert isinstance(dirs[0], FileSystemDirectoryEntry)
+        assert isinstance(files[0], FileSystemFileEntry)
+
+    def test_descendants_of_subdirectory(self, hier_tmp_path: Path) -> None:
+        """Descendants of a subdirectory should not include sibling or root entries."""
+        root = FileSystemDirectoryEntry(hier_tmp_path)
+        seasons = [e for e in root.entries() if e.name == "Seasons_artist"][0]
+        assert isinstance(seasons, FileSystemDirectoryEntry)
+        desc = seasons.descendants()
+        assert len(desc) == 7  # album1_spring(dir) + 3 files + album2_fall(dir) + 2 files
+        names = {e.name for e in desc}
+        assert names == {"album1_spring", "album2_fall", "track-rainy-day-01.mp3", "track-night-02.mp3", "track-before-the-dawn-03.mp3", "track-fall-01.mp3", "track-fall-02.mp3"}
+
+    def test_descendants_parent_pointers(self, hier_tmp_path: Path) -> None:
+        """Each descendant should point to its immediate parent, not the root."""
+        root = FileSystemDirectoryEntry(hier_tmp_path)
+        all_desc = root.descendants()
+        for entry in all_desc:
+            assert entry.parent is not None
+            assert isinstance(entry.parent, FileSystemDirectoryEntry)
+
+    def test_descendants_deep_nesting(self, hier_tmp_path: Path) -> None:
+        """The bonus directory inside Colors has a deeper descendant (hidden_colors.ogg)."""
+        root = FileSystemDirectoryEntry(hier_tmp_path)
+        jester = [e for e in root.entries() if e.name == "Artist_formerly_known_as_Jester"][0]
+        colors = [e for e in FileSystemDirectoryEntry(jester.path).entries() if e.name == "Colors"][0]
+        assert isinstance(colors, FileSystemDirectoryEntry)
+        all_colors_desc = colors.descendants()
+        assert len(all_colors_desc) == 4  # purple-01.mp3, rain-02.mp3, bonus/dir, hidden_colors.ogg
+        file_desc = [e for e in all_colors_desc if isinstance(e, FileSystemFileEntry)]
+        dir_desc = [e for e in all_colors_desc if isinstance(e, FileSystemDirectoryEntry)]
+        assert len(file_desc) == 3  # purple-01.mp3, rain-02.mp3, hidden_colors.ogg
+        assert len(dir_desc) == 1
+        bonus = dir_desc[0]
+        bonus_desc = bonus.descendants()
+        assert len(bonus_desc) == 1
+        assert bonus_desc[0].name == "hidden_colors.ogg"
+
+    def test_descendants_empty_directory(self, tmp_path: Path) -> None:
+        """An empty directory returns no descendants."""
+        empty_dir = tmp_path / "empty"
+        empty_dir.mkdir()
+        entry = FileSystemDirectoryEntry(empty_dir)
+        assert entry.descendants() == []
+
+    def test_descendants_flat_structure(self, tmp_path: Path) -> None:
+        """When a directory has only files and no subdirs, descendants = all files."""
+        (tmp_path / "a.mp3").touch()
+        (tmp_path / "b.flac").touch()
+        (tmp_path / "c.ogg").touch()
+        entry = FileSystemDirectoryEntry(tmp_path)
+        desc = entry.descendants()
+        assert len(desc) == 3
+        assert all(isinstance(e, FileSystemFileEntry) for e in desc)
+
+    def test_descendants_flatten_cross_branches(self, hier_tmp_path: Path) -> None:
+        """Descendants should be a flat list across all branches, not grouped."""
+        root = FileSystemDirectoryEntry(hier_tmp_path)
+        all_desc = root.descendants()
+        for name in ["loose-song1.mp3", "loose-song2.m4a", "track-rainy-day-01.mp3", "track-fall-02.mp3", "hidden_colors.ogg"]:
+            assert any(e.name == name for e in all_desc)
