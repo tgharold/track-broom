@@ -41,7 +41,7 @@ TONES = [
 ]
 
 
-def main() -> None:
+def main() -> int:
     """Generate all test MP3 files."""
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -69,6 +69,8 @@ def main() -> None:
         print(f"  Created {output_path}")
 
     print(f"All {len(TONES)} tones generated in {OUTPUT_DIR}/")
+
+    return len(TONES)
 
 
 if __name__ == "__main__":
