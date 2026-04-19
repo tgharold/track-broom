@@ -8,6 +8,7 @@ from rich.console import Console
 from rich.table import Table
 
 from track_broom import __version__
+from track_broom.filetree import FileSystemDirectoryEntry, FileSystemFileEntry
 from track_broom.scanner import list_files, scan_music
 from track_broom.tags import get_tags
 
@@ -87,30 +88,27 @@ def list_files_cmd(
         else:
             console.print("[yellow]No files found[/yellow]")
         return
+    root_dir = FileSystemDirectoryEntry(path) if path.is_dir() else None
     results = []
-    for file_path, ext in files:
+    for file_path, _ext in files:
+        entry = FileSystemFileEntry(file_path, parent=root_dir) if root_dir else FileSystemFileEntry(file_path)
         if path.is_dir():
-            display = file_path.relative_to(path)
+            display = entry.path.relative_to(path)
         else:
-            display = file_path
-        name = display.name
-        directory = str(display.parent) if display.parent != Path(".") else ""
+            display = entry.path
         results.append(
             {
                 "path": str(display),
-                "directory": directory,
-                "filename": name,
-                "extension": ext,
+                "directory": str(display.parent) if display.parent != Path(".") else "",
+                "filename": display.name,
+                "extension": entry.extension,
             }
         )
     if output_json:
         typer.echo(json.dumps({"results": results}))
     else:
-        for file_path, _ext in files:
-            if path.is_dir():
-                console.print(str(file_path.relative_to(path)))
-            else:
-                console.print(file_path.name)
+        for result in results:
+            console.print(result["path"])
 
 
 @app.command("000-enhance-genres")
