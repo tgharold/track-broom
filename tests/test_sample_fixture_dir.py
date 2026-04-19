@@ -2,12 +2,7 @@
 
 from pathlib import Path
 
-from tests.fixtures.builders import FORMATS, TONES
-
-EXPECTED_TONES = len(TONES)
-EXPECTED_FORMATS = len(FORMATS)
-EXPECTED_TOTAL = EXPECTED_TONES * EXPECTED_FORMATS
-
+from tests.fixtures.builders import EXPECTED_TOTAL_FILES, FORMATS, TONES
 
 class TestFixtureDirSmoke:
     """Smoke test that sample_fixture_dir generates the right structure."""
@@ -30,8 +25,8 @@ class TestFixtureDirSmoke:
 
     def test_total_files_matches_expected_count(self, sample_fixture_dir: Path) -> None:
         total = sum(1 for f in sample_fixture_dir.rglob("*") if f.is_file())
-        assert total == EXPECTED_TOTAL, (
-            f"Expected {EXPECTED_TOTAL} files, found {total}"
+        assert total == EXPECTED_TOTAL_FILES, (
+            f"Expected {EXPECTED_TOTAL_FILES} files, found {total}"
         )
 
     def test_all_files_nonempty(self, sample_fixture_dir: Path) -> None:

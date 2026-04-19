@@ -60,6 +60,8 @@ FORMATS = {
     "wma": {"encode": encode_wma, "tags": add_wma_tags},
 }
 
+EXPECTED_TOTAL_FILES = len(TONES) * len(FORMATS)
+
 
 def _build_tone_file(
     output_dir: Path,
