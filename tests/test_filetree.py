@@ -4,10 +4,65 @@ import tempfile
 from datetime import UTC, datetime
 from pathlib import Path
 
+import pytest
+
 from track_broom.filetree import (
     FileSystemDirectoryEntry,
     FileSystemFileEntry,
 )
+
+
+@pytest.fixture
+def hier_tmp_path(tmp_path: Path) -> Path:
+    """Create a multi-level directory structure for reuse in tests.
+
+    Structure::
+
+        /tmp_path
+            loose-song1.mp3
+            loose-song2.m4a
+            Seasons_artist/
+                album1_spring/
+                    track-rainy-day-01.mp3
+                    track-night-02.mp3
+                    track-before-the-dawn-03.mp3
+                album2_fall/
+                    track-fall-01.mp3
+                    track-fall-02.mp3
+            Artist_formerly_known_as_Jester/
+                Colors/
+                    purple-01.mp3
+                    rain-02.mp3
+                    bonus/
+                        hidden_colors.ogg
+    """
+    (tmp_path / "loose-song1.mp3").touch()
+    (tmp_path / "loose-song2.m4a").touch()
+
+    seasons = tmp_path / "Seasons_artist"
+    seasons.mkdir()
+    album1 = seasons / "album1_spring"
+    album1.mkdir()
+    (album1 / "track-rainy-day-01.mp3").touch()
+    (album1 / "track-night-02.mp3").touch()
+    (album1 / "track-before-the-dawn-03.mp3").touch()
+    album2 = seasons / "album2_fall"
+    album2.mkdir()
+    (album2 / "track-fall-01.mp3").touch()
+    (album2 / "track-fall-02.mp3").touch()
+
+    jester = tmp_path / "Artist_formerly_known_as_Jester"
+    jester.mkdir()
+    colors = jester / "Colors"
+    colors.mkdir()
+    (colors / "purple-01.mp3").touch()
+    (colors / "rain-02.mp3").touch()
+    bonus = colors / "bonus"
+    bonus.mkdir()
+    (bonus / "hidden_colors.ogg").touch()
+
+    return tmp_path
+
 
 # ---- FileSystemEntry base class ----
 
@@ -277,57 +332,13 @@ class TestFileSystemDirectoryEntry:
 class TestFileTreeIntegration:
     """Integration tests combining multiple entry types."""
 
-    def test_hierarchical_tree(self, tmp_path: Path) -> None:
+    def test_hierarchical_tree(self, hier_tmp_path: Path) -> None:
         """Test a multi-level directory structure."""
-        # Create:
-        # /base
-        #   loose-song1.mp3
-        #   loose-song2.m4a
-        #   Seasons_artist/
-        #     album1_spring/
-        #       track-rainy-day-01.mp3
-        #       track-night-02.mp3
-        #       track-before-the-dawn-03.mp3
-        #     album2_fall/
-        #       track-fall-01.mp3
-        #       track-fall-02.mp3
-        #   Artist_formerly_known_as_Jester/
-        #     Colors/
-        #       purple-01.mp3
-        #       rain-02.mp3
-        #       bonus/
-        #         hidden_colors.ogg
-
-        (tmp_path / "loose-song1.mp3").touch()
-        (tmp_path / "loose-song2.m4a").touch()
-
-        seasons = tmp_path / "Seasons_artist"
-        seasons.mkdir()
-        album1 = seasons / "album1_spring"
-        album1.mkdir()
-        (album1 / "track-rainy-day-01.mp3").touch()
-        (album1 / "track-night-02.mp3").touch()
-        (album1 / "track-before-the-dawn-03.mp3").touch()
-        album2 = seasons / "album2_fall"
-        album2.mkdir()
-        (album2 / "track-fall-01.mp3").touch()
-        (album2 / "track-fall-02.mp3").touch()
-
-        jester = tmp_path / "Artist_formerly_known_as_Jester"
-        jester.mkdir()
-        colors = jester / "Colors"
-        colors.mkdir()
-        (colors / "purple-01.mp3").touch()
-        (colors / "rain-02.mp3").touch()
-        bonus = colors / "bonus"
-        bonus.mkdir()
-        (bonus / "hidden_colors.ogg").touch()
-
-        root = FileSystemDirectoryEntry(tmp_path)
+        root = FileSystemDirectoryEntry(hier_tmp_path)
 
         top_children = root.entries()
         assert len(top_children) == 4  # loose-song1.mp3, loose-song2.m4a, Seasons_artist/, Artist_formerly_known_as_Jester/
-        assert root.name == tmp_path.name
+        assert root.name == hier_tmp_path.name
 
         seasons_entry = [c for c in top_children if c.name == "Seasons_artist"][0]
         assert isinstance(seasons_entry, FileSystemDirectoryEntry)
