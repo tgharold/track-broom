@@ -7,6 +7,7 @@
 		"ghcr.io/devcontainers-extra/features/ffmpeg-apt-get:1": {},
 		"ghcr.io/devcontainers/features/node:1": {},
 		"ghcr.io/danzilberdan/devcontainers/opencode:latest": {},
+		"ghcr.io/devcontainers-extra/features/ripgrep:1": {},
 		"ghcr.io/jsburckhardt/devcontainer-features/ruff:1": {},
 		"ghcr.io/devcontainers-extra/features/uv:1": {}
 	},
