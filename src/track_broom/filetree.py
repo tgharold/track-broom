@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from datetime import datetime, timezone
 from pathlib import Path
 
 
@@ -23,9 +24,9 @@ class FileSystemEntry:
         return self._stat.st_size
 
     @property
-    def last_modified(self) -> float:
-        """Last modification time as POSIX timestamp."""
-        return self._stat.st_mtime
+    def last_modified(self) -> datetime:
+        """Last modification time as timezone-aware datetime."""
+        return datetime.fromtimestamp(self._stat.st_mtime, tz=timezone.utc)
 
     @property
     def path(self) -> Path:
