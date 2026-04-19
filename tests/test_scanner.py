@@ -2,6 +2,8 @@
 
 from pathlib import Path
 
+from tests.utils import add_m4a_tags, encode_m4a, tone_samples
+
 import pytest
 
 from track_broom.scanner import list_files
@@ -23,10 +25,13 @@ def sample_dir(tmp_path: Path) -> Path:
     (sub1 / "track02.mp3").touch()
     (sub1 / "notes.md").touch()
 
-    # Deeper nesting
+    # Deeper nesting — real M4A file (not .touch())
     sub2 = sub1 / "bonus"
     sub2.mkdir()
-    (sub2 / "hidden.m4a").touch()
+    pcm_data = tone_samples(freq=440, duration=0.5)
+    m4a_path = sub2 / "hidden.m4a"
+    encode_m4a(pcm_data, str(m4a_path))
+    add_m4a_tags(str(m4a_path), title="Hidden Track")
 
     # Empty directory
     (tmp_path / "empty_album").mkdir()

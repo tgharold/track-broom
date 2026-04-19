@@ -55,8 +55,7 @@ def encode_mp3(
     Returns output_path on success, raises ffmpeg.Error on failure.
     """
     (
-        ffmpeg
-        .input("pipe:0", format="s16le", ar=samplerate, ac=channels)
+        ffmpeg.input("pipe:0", format="s16le", ar=samplerate, ac=channels)
         .output(output_path, ar=samplerate, **{"b:a": f"{bitrate}k"})
         .overwrite_output()
         .run(input=pcm_data, capture_stdout=True, capture_stderr=True)
@@ -91,5 +90,53 @@ def add_id3_tags(
     if genre:
         tags.add(TCON(encoding=3, text=genre))
     tags.add(TRCK(encoding=3, text=str(tracknumber)))
+
+    audio.save()
+
+
+def encode_m4a(
+    pcm_data: bytes,
+    output_path: str,
+    samplerate: int = 44100,
+    channels: int = 1,
+) -> str:
+    """Encode raw PCM bytes to M4A (ALAC) using ffmpeg-python.
+
+    Returns output_path on success, raises ffmpeg.Error on failure.
+    """
+    (
+        ffmpeg.input("pipe:0", format="s16le", ar=samplerate, ac=channels)
+        .output(output_path, ar=samplerate, acodec="alac")
+        .overwrite_output()
+        .run(input=pcm_data, capture_stdout=True, capture_stderr=True)
+    )
+    return output_path
+
+
+def add_m4a_tags(
+    filepath: str,
+    title: str,
+    artist: str = "",
+    album: str = "",
+    genre: str = "",
+    tracknumber: int = 1,
+) -> None:
+    """Write MP4/M4A tags using mutagen.mp4.MP4 frames.
+
+    Uses Apple/MP4 tag keys (nam, ART, alb, day, gnr , trkn, disk).
+    """
+    from mutagen.mp4 import MP4
+
+    audio = MP4(filepath)
+    audio.tags["\xa9nam"] = [title]
+    if artist:
+        audio.tags["\xa9ART"] = [artist]
+    if album:
+        audio.tags["\xa9alb"] = [album]
+    if genre:
+        audio.tags["gnr "] = [genre]
+
+    # tracknumber is a tuple of (current, total)
+    audio.tags["trkn"] = [(tracknumber, 0)]
 
     audio.save()

@@ -16,9 +16,10 @@
 - `.venv/bin/ruff format .` — formatter (config in `pyproject.toml`)
 
 ## Test
-- `.venv/bin/python -m pytest tests/` — run all 28 tests
-  - `tests/test_scanner.py` (13 tests) — file discovery
+- `.venv/bin/python -m pytest tests/` — run all 35 tests
+  - `tests/test_scanner.py` (14 tests) — file discovery
   - `tests/test_generate_tone.py` (14 tests) — PCM generation, ffmpeg encoding, ID3 tags (uses `tests.utils`)
+  - `tests/test_m4a.py` (7 tests) — M4A encoding with ALAC, MP4 tag writing (uses `tests.utils`)
   - **No `test_tags.py`** — `tags.py` has no dedicated tests despite being the core module
 
 ## Architecture

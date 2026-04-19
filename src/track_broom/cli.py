@@ -8,7 +8,7 @@ from rich.table import Table
 
 from track_broom import __version__
 from track_broom.scanner import list_files, scan_music
-from track_broom.tags import get_tags, set_genres
+from track_broom.tags import get_tags
 
 app = typer.Typer(
     name="track_broom",

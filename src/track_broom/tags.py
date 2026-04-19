@@ -1,11 +1,12 @@
 """Read and write metadata from music files using mutagen."""
 
 from pathlib import Path
-from mutagen.mp3 import MP3
+
+from mutagen import File as MutagenFile
 from mutagen.flac import FLAC
+from mutagen.mp3 import MP3
 from mutagen.mp4 import MP4
 from mutagen.oggvorbis import OggVorbis
-from mutagen import File as MutagenFile
 
 try:
     from mutagen.wma import WMA
